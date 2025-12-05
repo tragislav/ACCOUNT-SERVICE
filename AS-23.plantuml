@@ -1,7 +1,7 @@
 @startuml
 title Получение информации о счете по данным счета
 
-participant "Service NEW" as service
+participant "Service NEW BRANCH" as service
 participant "Account Service" as account_service
 database "Account Database" as db
 
