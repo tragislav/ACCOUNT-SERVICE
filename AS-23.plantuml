@@ -1,0 +1,33 @@
+@startuml
+title Получение информации о счете по данным счета
+
+participant "Service" as service
+participant "Account Service" as account_service
+database "Account Database" as db
+
+autonumber
+
+service -> account_service++: POST account-service/accounts/byAccountData
+activate service
+
+group #pink Невалидные данные
+  account_service --> service: HTTP 400 Bad Request + JSON
+end
+
+alt Запрос с userId
+  account_service -> db++: SQL-запрос на получение данных по userId
+else Запрос с accountId
+  account_service -> db: SQL-запрос на получение данных по accountId
+else Запрос с accountNumber
+  account_service -> db: SQL-запрос на получение данных по accountNumber
+end
+db --> account_service--: Результат запроса
+
+group #pink Данные не найдены
+  account_service --> service: HTTP 404 Not Found + JSON
+end
+
+account_service --> service--: HTTP 200 OK + JSON
+deactivate service
+
+@enduml
